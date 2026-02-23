@@ -1,7 +1,3 @@
-//
-
-//
-
 function getSeverityRank(status) {
     switch (status?.toLowerCase()) {
         case "danger":
