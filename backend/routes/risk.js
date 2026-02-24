@@ -6,9 +6,6 @@ router.post("/check-risk", async (req, res) => {
   try {
     const { state, district } = req.body;
 
-    // UPDATE VERSION 4 GRR AFTER ADD 
-    // distance.js
-    // const result = await getRiskData(state, district);
     const result = await getRiskData(req.body);
 
     res.json(result);

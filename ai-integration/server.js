@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.use("/api", adviceRoute);
 
-const PORT = 6000;
+const PORT = 7000;
 
 //test get
 app.get("/api/hello", (req, res) => {

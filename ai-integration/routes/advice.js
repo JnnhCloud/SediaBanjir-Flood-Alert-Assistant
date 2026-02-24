@@ -15,8 +15,8 @@ router.post("/generate-advice", async (req, res) => {
     }
 });
 
-// router.post("/generate-advice", (req, res) => {
-//   res.json({ advice: "AI service is receiving data!" });
-// });
+router.post("/generate-advice", (req, res) => {
+  res.json({ advice: "AI service is receiving data!" });
+});
 
 module.exports = router;
