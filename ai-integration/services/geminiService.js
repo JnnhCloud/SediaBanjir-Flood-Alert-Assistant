@@ -8,13 +8,15 @@ async function generativeAdvice(riskData) {
     const prompt = `
     You are a flood emergency assistant.
 
+    Respond in ${riskData.language === "bm" ? "Bahasa Malaysia" : "English"}.
+
     Location: ${riskData.location}
     Risk Level: ${riskData.riskLevel}
     Water Level: ${riskData.station?.waterLevel} meters
     Trend: ${riskData.station?.trend}
     Thunderstorm Active: ${riskData.weather?.thunderstormActive}
-    
-    Explain the situation in simple language.
+
+    Explain the situation in simple language suitable for the public.
     Provide:
     1. Short explanation
     2. Preparation checklist

@@ -33,7 +33,7 @@ async function getRiskData(input) {
 
   let selectedStation;
 
-  // 🔥 If lat/lng provided
+  // If lat/lng provided
   if (input.lat && input.lng) {
     const userLat = parseFloat(input.lat);
     const userLng = parseFloat(input.lng);
@@ -88,8 +88,16 @@ async function getRiskData(input) {
   return {
     riskLevel: finalRisk,
     location: `${selectedStation.e}, ${selectedStation.f}`,
+
+    coordinates: {
+      lat: parseFloat(selectedStation.c),
+      lng: parseFloat(selectedStation.d)
+    },
+
     station: {
       name: selectedStation.b,
+      lat: parseFloat(selectedStation.c),
+      lng: parseFloat(selectedStation.d),
       waterLevel: parseFloat(selectedStation.m),
       threshold: parseFloat(selectedStation.o),
       trend: selectedStation.s,
@@ -98,9 +106,11 @@ async function getRiskData(input) {
         ? selectedStation.distance.toFixed(2)
         : null
     },
+
     weather: {
       thunderstormActive: !!activeStorm
     },
+
     cached: isCacheValid()
   };
 }
