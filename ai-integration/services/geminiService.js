@@ -6,21 +6,36 @@ async function generativeAdvice(riskData) {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const prompt = `
-    You are a flood emergency assistant.
+    You are a Malaysian flood risk advisory system.
 
-    Respond in ${riskData.language === "bm" ? "Bahasa Malaysia" : "English"}.
+    Location:
+    ${riskData.location.full}
 
-    Location: ${riskData.location}
     Risk Level: ${riskData.riskLevel}
-    Water Level: ${riskData.station?.waterLevel} meters
-    Trend: ${riskData.station?.trend}
-    Thunderstorm Active: ${riskData.weather?.thunderstormActive}
+    Risk Score: ${riskData.riskScore}/100
 
-    Explain the situation in simple language suitable for the public.
+    Water Metrics:
+    - Current Level: ${riskData.metrics.waterLevel}m
+    - Danger Threshold: ${riskData.metrics.threshold}m
+    - Percentage of Threshold: ${riskData.metrics.percentageOfThreshold}%
+    - Exceed Amount: ${riskData.metrics.exceedMeters}m
+    - Trend: ${riskData.metrics.trend}
+    - Last Updated: ${riskData.metrics.hoursSinceUpdate} hours ago
+
+    Weather:
+    - Thunderstorm Active: ${riskData.weather.thunderstormActive}
+
+    Nearest Monitoring Station:
+    ${riskData.station.name}
+    Distance: ${riskData.station.distanceKm} km
+
     Provide:
-    1. Short explanation
-    2. Preparation checklist
-    3. Evacuation advice if necessary    
+    1. Short risk explanation
+    2. Immediate action advice
+    3. Who should evacuate
+    4. Reassurance if risk is low
+
+    Keep it clear and practical.
     `;
 
     const result = await model.generateContent(prompt);
