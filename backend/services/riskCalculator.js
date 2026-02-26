@@ -79,29 +79,86 @@ async function getRiskData(input) {
     alert.Msg_EN?.toLowerCase().includes(selectedStation.f.toLowerCase())
   );
 
-  let finalRisk = selectedStation.n;
+  // ADVANCE
+  const waterLevel = parseFloat(selectedStation.m);
+  const threshold = parseFloat(selectedStation.o);
 
-  if (selectedStation.n === "Danger" && activeStorm) {
-    finalRisk = "Critical";
+  const percentageOfThreshold = threshold
+    ? (waterLevel / threshold) * 100
+    : 0;
+
+  const exceedMeters = waterLevel - threshold;
+
+  const lastUpdated = new Date(selectedStation.q);
+  const hoursSinceUpdate =
+    (Date.now() - lastUpdated.getTime()) / (1000 * 60 * 60);
+  
+  // ADVANCE 2
+  let riskScore = 0;
+
+  // Water contribution (70%)
+  riskScore += Math.min(percentageOfThreshold, 100) * 0.7;
+
+  // Trend contribution (20%)
+  if (selectedStation.s === "Rising") {
+    riskScore += 20;
   }
+
+  // Weather contribution (10%)
+  if (activeStorm) {
+    riskScore += 10;
+  }
+
+  riskScore = Math.min(Math.round(riskScore), 100);
+
+
+  // ADVCNDE FINAL
+  let finalRisk = "Low";
+
+  if (riskScore >= 80) {
+    finalRisk = "Severe";
+  } else if (riskScore >= 60) {
+    finalRisk = "Danger";
+  } else if (riskScore >= 40) {
+    finalRisk = "Warning";
+  } else if (riskScore >= 20) {
+    finalRisk = "Watch";
+  }
+    
+  
+  // NOW
+  function extractSpecificPlace(stationName) {
+    if (!stationName) return "";
+    const match = stationName.split(" di ");
+    return match.length > 1 ? match[1] : stationName;
+  }
+
+  const specificPlace = extractSpecificPlace(selectedStation.b);
 
   return {
     riskLevel: finalRisk,
-    location: `${selectedStation.e}, ${selectedStation.f}`,
+    riskScore,
 
-    coordinates: {
-      lat: parseFloat(selectedStation.c),
-      lng: parseFloat(selectedStation.d)
+    location: {
+      area: specificPlace,
+      district: selectedStation.e,
+      state: selectedStation.f,
+      full: `${specificPlace}, ${selectedStation.e}, ${selectedStation.f}`
+    },
+
+    metrics: {
+      waterLevel,
+      threshold,
+      percentageOfThreshold: Number(percentageOfThreshold.toFixed(1)),
+      exceedMeters: Number(exceedMeters.toFixed(2)),
+      trend: selectedStation.s,
+      hoursSinceUpdate: Number(hoursSinceUpdate.toFixed(1))
     },
 
     station: {
       name: selectedStation.b,
       lat: parseFloat(selectedStation.c),
       lng: parseFloat(selectedStation.d),
-      waterLevel: parseFloat(selectedStation.m),
-      threshold: parseFloat(selectedStation.o),
-      trend: selectedStation.s,
-      lastUpdated: selectedStation.q,
       distanceKm: selectedStation.distance
         ? selectedStation.distance.toFixed(2)
         : null
