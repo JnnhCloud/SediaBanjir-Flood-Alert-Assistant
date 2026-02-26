@@ -84,10 +84,25 @@ async function getRiskData(input) {
   if (selectedStation.n === "Danger" && activeStorm) {
     finalRisk = "Critical";
   }
+  
+  // NOW
+  function extractSpecificPlace(stationName) {
+    if (!stationName) return "";
+    const match = stationName.split(" di ");
+    return match.length > 1 ? match[1] : stationName;
+  }
+
+  const specificPlace = extractSpecificPlace(selectedStation.b);
 
   return {
     riskLevel: finalRisk,
-    location: `${selectedStation.e}, ${selectedStation.f}`,
+
+    location: {
+      area: specificPlace,
+      district: selectedStation.e,
+      state: selectedStation.f,
+      full: `${specificPlace}, ${selectedStation.e}, ${selectedStation.f}`
+    },
 
     coordinates: {
       lat: parseFloat(selectedStation.c),
