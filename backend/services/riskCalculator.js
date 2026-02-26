@@ -53,14 +53,24 @@ async function getRiskData(input) {
 
   } else if (input.state && input.district) {
 
+    console.log("User Input:", input.state, input.district);
+    console.log("Example Station from API:", validStations[0]);
+
     const filtered = validStations.filter(station =>
       station.f === input.state.toUpperCase() &&
-      station.e.toLowerCase() === input.district.toLowerCase()
+      station.e.trim().toLowerCase().includes(
+        input.district.trim().toLowerCase()
+      )
     );
+
 
     if (filtered.length === 0) {
       return {
         riskLevel: "Low",
+        location: `${input.district}, ${input.state}`,
+        coordinates: null,
+        station: null,
+        weather: { thunderstormActive: false },
         message: "No stations found for this area."
       };
     }
