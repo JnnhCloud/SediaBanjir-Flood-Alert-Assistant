@@ -93,7 +93,7 @@ async function getRiskData(input) {
   const hoursSinceUpdate =
     (Date.now() - lastUpdated.getTime()) / (1000 * 60 * 60);
   
-  // ADNVAMCE
+  // ADVANCE
   let riskScore = 0;
 
   // Water contribution (70%)
