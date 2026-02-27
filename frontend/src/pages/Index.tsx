@@ -443,6 +443,59 @@ export default function Index() {
           )}
         </div>
       </div>
+      {/* Footer */}
+      <div
+        style={{
+          marginTop: 50,
+          marginBottom: 50,
+          textAlign: "center",
+          position: "relative",
+        }}
+      >
+        {/* Main footer text with hyperlinks*/}
+        <p
+          style={{
+            width: 557,
+            height: 52,
+            margin: "0 auto",
+            fontFamily: "Outfit, sans-serif",
+            fontWeight: 400,
+            fontSize: 16,
+            lineHeight: "100%",
+            letterSpacing: 0,
+            textAlign: "center",
+            color: "#000000",
+          }}
+        >
+          Based on data from{" "}
+          <a
+            href="https://www.water.gov.my/index.php"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontWeight: 600, color: "#000000", textDecoration: "none" }}
+          >
+            Department of Irrigation and Drainage Malaysia
+          </a>
+        </p>
+
+        {/* Disclaimer below */}
+        <p
+          style={{
+            width: 411,
+            height: 18,
+            margin: "10px auto 0 auto",
+            fontFamily: "Outfit, sans-serif",
+            fontWeight: 400,
+            fontSize: 13,
+            lineHeight: "100%",
+            letterSpacing: 0,
+            textAlign: "center",
+            color: "#6E6363",
+          }}
+        >
+          · Relief Centre information is subject to official updates from NADMA.
+        </p>
+      </div>
     </div>
   );
 }
