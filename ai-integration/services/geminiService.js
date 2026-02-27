@@ -8,8 +8,10 @@ async function generativeAdvice(riskData) {
     const prompt = `
     You are a Malaysian flood risk advisory system.
 
+    Respond in ${riskData.language === "bm" ? "Bahasa Malaysia" : "English"}.
+
     Location:
-    ${riskData.location.full}
+    ${riskData.location.full || riskData.location.area}
 
     Risk Level: ${riskData.riskLevel}
     Risk Score: ${riskData.riskScore}/100
