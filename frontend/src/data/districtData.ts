@@ -1,4 +1,3 @@
-// src/data/districtData.ts
 export const districtData: Record<string, string[]> = {
   Johor: ["Johor Bahru", "Batu Pahat", "Muar", "Kluang", "Segamat", "Pontian", "Kota Tinggi", "Mersing", "Tangkak"],
   Kedah: ["Alor Setar"],
