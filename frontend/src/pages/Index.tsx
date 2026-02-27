@@ -294,6 +294,7 @@ export default function Index() {
             backgroundColor: "#e77a7a",
             borderRadius: 25,
             padding: 30,
+            boxShadow: "9px 10px 8px 0px #00000040",
             zIndex: 0,
           }}
         ></div>
