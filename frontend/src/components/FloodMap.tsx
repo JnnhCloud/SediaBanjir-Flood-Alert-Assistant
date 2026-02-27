@@ -27,18 +27,26 @@ export default function FloodMap({
   const malaysiaCenter: [number, number] = [4.2105, 101.9758];
   const malaysiaZoom = 6;
 
-  // Malaysia bounds to restrict panning
+  // // Malaysia bounds to restrict panning
+  // const malaysiaBounds = L.latLngBounds(
+  //   L.latLng(1.5, 98.0),
+  //   L.latLng(7.5, 119.5)
+  // );
+  
+  // Extend bounds to include part of Indonesia near southern Johor
   const malaysiaBounds = L.latLngBounds(
-    L.latLng(1.5, 98.0),
-    L.latLng(7.5, 119.5)
+    L.latLng(0.5, 98.0),   // extend south
+    L.latLng(7.5, 119.5)   // keep northeast corner same
   );
+
+
 
   useEffect(() => {
     if (!mapRef.current && mapContainerRef.current) {
       mapRef.current = L.map(mapContainerRef.current, {
         center: malaysiaCenter,
         zoom: malaysiaZoom,
-        minZoom: 6,
+        minZoom: 5,
         maxZoom: 11,
       });
 
