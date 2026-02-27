@@ -122,17 +122,15 @@ async function getRiskData(input) {
   riskScore = Math.min(Math.round(riskScore), 100);
 
 
-  // ADVCNDE FINAL
-  let finalRisk = "Low";
+  // Normalize All Risk Levels
+  let finalRisk = "Normal";
 
-  if (riskScore >= 80) {
-    finalRisk = "Severe";
-  } else if (riskScore >= 60) {
+  if (riskScore >= 75) {
     finalRisk = "Danger";
-  } else if (riskScore >= 40) {
+  } else if (riskScore >= 50) {
     finalRisk = "Warning";
-  } else if (riskScore >= 20) {
-    finalRisk = "Watch";
+  } else if (riskScore >= 25) {
+    finalRisk = "Alert";
   }
     
   

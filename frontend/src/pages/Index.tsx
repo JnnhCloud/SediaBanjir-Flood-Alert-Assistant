@@ -11,6 +11,20 @@ export default function Index() {
   const [aiAdvice, setAiAdvice] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
+  // Map risk levels to colors
+  const riskColors: Record<string, string> = {
+    normal: "#11A700",
+    alert: "#F3FF0A",
+    warning: "#FF8C00",
+    danger: "#F70202",
+  };
+
+  const getRiskColor = (level?: string) => {
+    if (!level) return "#e77a7a"; // default color
+    const key = level.toLowerCase();
+    return riskColors[key] || "#e77a7a";
+  };
+
   const handleCheckRisk = async () => {
     if (!selectedState || !selectedDistrict) {
       alert("Please select both state and district!");
@@ -75,6 +89,32 @@ export default function Index() {
 
     return formatted;
   }
+
+  const [backRectColor, setBackRectColor] = useState("#e77a7a");
+  const [headingColor, setHeadingColor] = useState("#d32f2f");
+
+  const normalizeRisk = (level?: string) => {
+    if (!level) return "";
+
+    const l = level.toLowerCase().trim();
+
+    if (l.includes("normal")) return "normal";
+    if (l.includes("alert")) return "alert";
+    if (l.includes("warning")) return "warning";
+    if (l.includes("danger") || l.includes("critical") || l.includes("severe"))
+      return "danger";
+
+    return "";
+  };
+
+  // Whenever riskData changes, update colors
+  React.useEffect(() => {
+    const normalized = normalizeRisk(riskData?.riskLevel);
+    const color = riskColors[normalized] || "#e77a7a";
+
+    setBackRectColor(color);
+    setHeadingColor(color);
+  }, [riskData]);
 
   return (
     <div style={{ padding: 20 }}>
@@ -326,13 +366,14 @@ export default function Index() {
             left: 0,
             width: "100%",
             height: 699,
-            backgroundColor: "#e77a7a",
+            backgroundColor: backRectColor, // <-- dynamic
             borderRadius: 25,
             padding: 30,
             boxShadow: "9px 10px 8px 0px #00000040",
             zIndex: 0,
+            transition: "background-color 0.5s ease", // smooth color change
           }}
-        />
+        ></div>
 
         {/* Front Rectangle */}
         <div
@@ -350,8 +391,32 @@ export default function Index() {
         >
           {riskData && (
             <div style={{ marginBottom: 30 }}>
-              <h2 style={{ marginBottom: 15, color: "#d32f2f" }}>Risk Result</h2>
-              <div style={{ padding: 15, backgroundColor: "#fff", borderRadius: 15, border: "1px solid #ccc" }}>
+              <h2
+                style={{
+                  marginBottom: 15,
+                  fontSize: 36, // increased font size
+                  color: headingColor, // dynamic risk color
+                  transition: "color 0.5s ease",
+                  textShadow: `
+                    -1px -1px 2px rgba(0,0,0,0.1),
+                    1px -1px 2px rgba(0,0,0,0.1),
+                    -1px  1px 2px rgba(0,0,0,0.5),
+                    1px  1px 2px rgba(0,0,0,0.5)
+                  `
+                }}
+              >
+                Risk Result
+              </h2>
+              <div
+                style={{
+                  padding: 15,
+                  backgroundColor: "#fff",
+                  borderRadius: 15,
+                  border: "1px solid #ccc",
+                  color: "#333333", // softer text
+                }}
+              >
+              {/* <div style={{ padding: 15, backgroundColor: "#fff", borderRadius: 15, border: "1px solid #ccc" }}> */}
                 <p><b>Location:</b> {riskData.location.full}</p>
                 <p><b>Risk Level:</b> {riskData.riskLevel}</p>
                 <p><b>Risk Score:</b> {riskData.riskScore}/100</p>
@@ -367,7 +432,7 @@ export default function Index() {
 
           {aiAdvice && (
             <div>
-              <h2 style={{ marginBottom: 15, color: "#081D93" }}>AI Advice</h2>
+              <h2 style={{ marginBottom: 25, color: "#081D93" }}>AI Advice</h2>
               <div style={{ padding: 15, backgroundColor: "#fff", borderRadius: 15, border: "1px solid #ccc", lineHeight: 1.6 }}>
                 <div
                   className="ai-content"
