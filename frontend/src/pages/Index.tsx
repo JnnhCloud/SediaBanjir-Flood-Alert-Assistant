@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import LocationSelector from "../components/LocationSelector";
 import FloodMap from "../components/FloodMap";
+import { districtData } from "../data/districtData.ts";
 
 export default function Index() {
   const [language, setLanguage] = useState<"en" | "bm">("en");
@@ -170,16 +171,23 @@ export default function Index() {
           display: "flex",
           gap: "20px",  // Space between the dropdowns
           marginTop: "50px",  // Space between map and dropdown
-          width: "30%",  // Keep dropdown width at 30% (as per your preference)
-          // marginLeft: "24px", // Align with map on the left
+          width: "30%",  // Keep dropdown width at 30%
           marginLeft: "auto",
           marginRight: "auto",
-          marginBottom: "40px", // Add space between dropdowns and next section (Risk/AI)
+          marginBottom: "40px", // Space to next section
         }}
       >
         {/* STATE Dropdown */}
         <div style={{ flex: 1 }}>
-          <label style={{ display: "block", marginBottom: 6, fontWeight: 600, fontSize: 14, color: "#333" }}>
+          <label
+            style={{
+              display: "block",
+              marginBottom: 6,
+              fontWeight: 600,
+              fontSize: 14,
+              color: "#333",
+            }}
+          >
             State
           </label>
           <select
@@ -189,7 +197,7 @@ export default function Index() {
               setSelectedDistrict(""); // Reset district when state changes
             }}
             style={{
-              width: "100%",  // Keep it at 100% width of the container
+              width: "100%",
               padding: "10px 12px",
               borderRadius: 12,
               border: "1px solid #ddd",
@@ -199,31 +207,25 @@ export default function Index() {
             }}
           >
             <option value="">Select State</option>
-            {/* All 13 States and Federal Territories */}
-            <option value="Johor">Johor</option>
-            <option value="Kedah">Kedah</option>
-            <option value="Kelantan">Kelantan</option>
-            <option value="Melaka">Melaka</option>
-            <option value="Negeri Sembilan">Negeri Sembilan</option>
-            <option value="Pahang">Pahang</option>
-            <option value="Perak">Perak</option>
-            <option value="Perlis">Perlis</option>
-            <option value="Pulau Pinang">Pulau Pinang</option>
-            <option value="Sabah">Sabah</option>
-            <option value="Sarawak">Sarawak</option>
-            <option value="Selangor">Selangor</option>
-            <option value="Terengganu">Terengganu</option>
-
-            {/* Federal Territories */}
-            <option value="WP Kuala Lumpur">WP Kuala Lumpur</option>
-            <option value="WP Labuan">WP Labuan</option>
-            <option value="WP Putrajaya">WP Putrajaya</option>
+            {Object.keys(districtData).map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
           </select>
         </div>
 
         {/* DISTRICT Dropdown */}
         <div style={{ flex: 1 }}>
-          <label style={{ display: "block", marginBottom: 6, fontWeight: 600, fontSize: 14, color: "#333" }}>
+          <label
+            style={{
+              display: "block",
+              marginBottom: 6,
+              fontWeight: 600,
+              fontSize: 14,
+              color: "#333",
+            }}
+          >
             District
           </label>
           <select
@@ -231,7 +233,7 @@ export default function Index() {
             onChange={(e) => setSelectedDistrict(e.target.value)}
             disabled={!selectedState}
             style={{
-              width: "100%",  // Keep it at 100% width of the container
+              width: "100%",
               padding: "10px 12px",
               borderRadius: 12,
               border: "1px solid #ddd",
@@ -242,20 +244,13 @@ export default function Index() {
           >
             <option value="">{selectedState ? "Select District" : "Select state first"}</option>
 
-            {selectedState === "Johor" && (
-              <>
-                <option value="Johor Bahru">Johor Bahru</option>
-                <option value="Batu Pahat">Batu Pahat</option>
-                <option value="Muar">Muar</option>
-                <option value="Kluang">Kluang</option>
-                <option value="Segamat">Segamat</option>
-                <option value="Pontian">Pontian</option>
-                <option value="Kota Tinggi">Kota Tinggi</option>
-                <option value="Mersing">Mersing</option>
-                <option value="Tangkak">Tangkak</option>
-              </>
-            )}
-            {/* Add other states similarly */}
+            {/* Dynamically populate districts */}
+            {selectedState &&
+              districtData[selectedState]?.map((district: string) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
           </select>
         </div>
       </div>
@@ -265,19 +260,19 @@ export default function Index() {
         onClick={handleCheckRisk}
         disabled={loading}
         style={{
-          marginTop: "20px",        // Space between dropdowns and button
+          marginTop: "20px",
           display: "block",
           marginLeft: "auto",
           marginRight: "auto",
-          padding: "12px 30px",     // Bigger padding for better feel
+          padding: "12px 30px",
           fontSize: "16px",
           fontWeight: 600,
           color: "#fff",
-          backgroundColor: "#d32f2f",  // Bold red
+          backgroundColor: "#d32f2f",
           border: "none",
           borderRadius: "12px",
           cursor: loading ? "not-allowed" : "pointer",
-          boxShadow: "0 4px 6px rgba(0,0,0,0.2)", // Subtle shadow
+          boxShadow: "0 4px 6px rgba(0,0,0,0.2)",
           transition: "all 0.2s ease-in-out",
         }}
         onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = "#b71c1c")}
