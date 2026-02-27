@@ -262,14 +262,26 @@ export default function Index() {
 
       {/* Check Risk Button */}
       <button
+        onClick={handleCheckRisk}
+        disabled={loading}
         style={{
-          marginTop: "20px",  // Space between dropdown and button
+          marginTop: "20px",        // Space between dropdowns and button
           display: "block",
           marginLeft: "auto",
           marginRight: "auto",
+          padding: "12px 30px",     // Bigger padding for better feel
+          fontSize: "16px",
+          fontWeight: 600,
+          color: "#fff",
+          backgroundColor: "#d32f2f",  // Bold red
+          border: "none",
+          borderRadius: "12px",
+          cursor: loading ? "not-allowed" : "pointer",
+          boxShadow: "0 4px 6px rgba(0,0,0,0.2)", // Subtle shadow
+          transition: "all 0.2s ease-in-out",
         }}
-        onClick={handleCheckRisk}
-        disabled={loading}
+        onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = "#b71c1c")}
+        onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = "#d32f2f")}
       >
         {loading ? "Checking..." : "Check Risk"}
       </button>
