@@ -1,4 +1,3 @@
-// src/components/FloodMap.tsx
 import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -25,13 +24,31 @@ export default function FloodMap({
   const markerRef = useRef<L.CircleMarker | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
+  // Define the bounds for Malaysia
+  const malaysiaBounds = L.latLngBounds(
+    L.latLng(1.5, 98.0), // South-West corner (Southernmost point)
+    L.latLng(7.5, 119.5)  // North-East corner (Northernmost point)
+  );
+
   // Initialize map
   useEffect(() => {
     if (!mapRef.current && mapContainerRef.current) {
-      mapRef.current = L.map(mapContainerRef.current).setView([4.2105, 101.9758], 6);
+      mapRef.current = L.map(mapContainerRef.current, {
+        center: [4.2105, 101.9758], // Center on Malaysia
+        zoom: 6, // Initial zoom to show the entire country
+        minZoom: 6, // Minimum zoom level to restrict zooming out
+        maxZoom: 11, // Maximum zoom level to prevent zooming in too much
+        scrollWheelZoom: false, // Disable scroll zoom (optional)
+        attributionControl: false, // Optional, remove attribution if needed
+      });
+
+      // Set up the tile layer (OpenStreetMap)
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap contributors",
       }).addTo(mapRef.current);
+
+      // Restrict panning and zooming to Malaysia's bounds
+      mapRef.current.setMaxBounds(malaysiaBounds);
     }
   }, []);
 
@@ -42,7 +59,7 @@ export default function FloodMap({
     // Zoom to selected coordinates
     mapRef.current.setView([coordinates.lat, coordinates.lng], 11);
 
-    // Determine marker color
+    // Determine marker color based on risk level
     let color = "green";
     switch (riskLevel?.toLowerCase()) {
       case "danger":
