@@ -1,6 +1,7 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+console.log("GEMINI_API_KEY:", !!process.env.GEMINI_API_KEY);
 
 async function generativeAdvice(riskData) {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });

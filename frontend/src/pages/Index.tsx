@@ -3,6 +3,8 @@ import LocationSelector from "../components/LocationSelector";
 import FloodMap from "../components/FloodMap";
 import { districtData } from "../data/districtData.ts";
 
+const API_BASE = import.meta.env.VITE_BACKEND_URL;
+
 export default function Index() {
   const [language, setLanguage] = useState<"en" | "bm">("en");
   const [selectedState, setSelectedState] = useState("");
@@ -40,7 +42,7 @@ export default function Index() {
       setLoading(true);
 
       // 1️. Call backend /check-risk
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/check-risk`, {
+      const res = await fetch(`${API_BASE}/api/risk/check-risk`, {        
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -51,7 +53,7 @@ export default function Index() {
 
       // 2️. Call Gemini AI for advice
       const aiPayload = { ...data, language };
-      const aiRes = await fetch(`${import.meta.env.VITE_AI_URL}/api/generate-advice`, {
+      const aiRes = await fetch(`${API_BASE}/api/advice/generate-advice`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(aiPayload),
