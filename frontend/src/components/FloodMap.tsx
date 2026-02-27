@@ -134,5 +134,71 @@ export default function FloodMap({
     }
   }, [coordinates, stationName, riskLevel, metrics]);
 
-  return <div ref={mapContainerRef} style={{ height: "400px", marginBottom: "20px" }} />;
+  return (
+    <div
+      ref={mapContainerRef}
+      style={{
+        height: "400px",
+        position: "relative",  // Make legend positioning relative
+        marginBottom: "20px",
+        backgroundColor: "#000", // keep your background if needed
+      }}
+    >
+      {/* Leaflet Map is injected here */}
+
+      {/* Risk Legend */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "10px",   // distance from bottom
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          gap: "30px",
+          alignItems: "center",
+          padding: "5px 10px",
+          backgroundColor: "#00000080", // semi-transparent if desired
+          borderRadius: "15px",
+        }}
+      >
+        {[
+          { label: "Normal", color: "#11A700" },
+          { label: "Alert", color: "#F3FF0A" },
+          { label: "Warning", color: "#FF8C00" },
+          { label: "Danger", color: "#F70202" },
+        ].map((risk) => (
+          <div
+            key={risk.label}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <div
+              style={{
+                width: "24px",
+                height: "25px",
+                borderRadius: "50%",
+                backgroundColor: risk.color,
+              }}
+            />
+            <span
+              style={{
+                fontFamily: "Outfit, sans-serif",
+                fontWeight: 400,
+                fontSize: "24px",
+                color: "#fff",
+                lineHeight: "100%",
+              }}
+            >
+              {risk.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // return <div ref={mapContainerRef} style={{ height: "400px", marginBottom: "20px" }} />;
 }

@@ -9,7 +9,6 @@ export default function Index() {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [riskData, setRiskData] = useState<any>(null);
   const [aiAdvice, setAiAdvice] = useState<string>("");
-
   const [loading, setLoading] = useState(false);
 
   const handleCheckRisk = async () => {
@@ -37,11 +36,7 @@ export default function Index() {
       setRiskData(data);
 
       // 2️⃣ Call Gemini AI for advice
-      const aiPayload = {
-        ...data,
-        language, // now uses the user's selected language
-      };
-
+      const aiPayload = { ...data, language };
       const aiRes = await fetch("http://localhost:7000/api/generate-advice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -62,18 +57,16 @@ export default function Index() {
     if (!text) return "";
 
     let formatted = text
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")  // bold
-      .replace(/^### (.*$)/gim, "<h4>$1</h4>")         // sub headings (###)
-      .replace(/^---$/gim, "<hr>")                      // horizontal divider
-      .replace(/^\* (.*$)/gim, "<li>$1</li>")           // bullet points (*/ -)
-      .replace(/\n\n/g, "<br><br>");                    // paragraph spacing
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/^### (.*$)/gim, "<h4>$1</h4>")
+      .replace(/^---$/gim, "<hr>")
+      .replace(/^\* (.*$)/gim, "<li>$1</li>")
+      .replace(/\n\n/g, "<br><br>");
 
-    // Wrap <li> elements in <ul> if any
     if (/<li>/.test(formatted)) {
       formatted = formatted.replace(/(<li>.*<\/li>)/gis, "<ul>$1</ul>");
     }
 
-    // Apply a custom handling for sections (e.g., short explanation, advice)
     formatted = formatted
       .replace(/(1\.\s*Short Risk Explanation:)/g, "<h4>$1</h4>")
       .replace(/(2\.\s*Immediate Action Advice:)/g, "<h4>$1</h4>")
@@ -83,9 +76,9 @@ export default function Index() {
     return formatted;
   }
 
-
   return (
     <div style={{ padding: 20 }}>
+      {/* Header */}
       <div className="dashboard-header">
         <h1 className="main-title">SEDIABANJIR</h1>
         <p className="sub-title">Malaysia Flood Alert Assistant</p>
@@ -100,7 +93,7 @@ export default function Index() {
           borderRadius: "30px",
           boxShadow: "9px 10px 8px 0px #00000040",
           margin: "20px auto 40px auto",
-          padding: "25px 24px 30px 24px", // space for title
+          padding: "25px 24px 30px 24px",
         }}
       >
         {/* Map Title */}
@@ -116,7 +109,7 @@ export default function Index() {
           Flood Monitoring Map
         </div>
 
-        {/* Inside Map Rectangle */}
+        {/* Map Rectangle */}
         <div
           style={{
             width: "100%",
@@ -124,7 +117,7 @@ export default function Index() {
             backgroundColor: "#f0f0f0",
             borderRadius: "30px",
             boxShadow: "0px 4px 4px 0px #00000040 inset",
-            overflow: "hidden", // keeps map rounded
+            overflow: "hidden",
           }}
         >
           <FloodMap
@@ -138,9 +131,52 @@ export default function Index() {
             metrics={riskData?.metrics}
           />
         </div>
+
+        {/* Risk Legend */}
+        <div
+          style={{
+            marginTop: 15,
+            display: "flex",
+            justifyContent: "center",
+            gap: 40,
+            alignItems: "center",
+          }}
+        >
+          {[
+            { label: "Normal", color: "#11A700" },
+            { label: "Alert", color: "#F3FF0A" },
+            { label: "Warning", color: "#FF8C00" },
+            { label: "Danger", color: "#F70202" },
+          ].map((risk) => (
+            <div
+              key={risk.label}
+              style={{ display: "flex", alignItems: "center", gap: 8 }}
+            >
+              <div
+                style={{
+                  width: 24,
+                  height: 25,
+                  borderRadius: "50%",
+                  backgroundColor: risk.color,
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: "Outfit, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 24,
+                  color: "#000",
+                  lineHeight: "100%",
+                }}
+              >
+                {risk.label}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Language and location selector below */}
+      {/* Language Selector */}
       <div style={{ marginBottom: 15, textAlign: "center" }}>
         <label>
           <input
@@ -152,7 +188,6 @@ export default function Index() {
           />
           English
         </label>
-
         <label style={{ marginLeft: 15 }}>
           <input
             type="radio"
@@ -165,19 +200,19 @@ export default function Index() {
         </label>
       </div>
 
-      {/* State and District Dropdowns */}
+      {/* State & District Dropdowns */}
       <div
         style={{
           display: "flex",
-          gap: "20px",  // Space between the dropdowns
-          marginTop: "50px",  // Space between map and dropdown
-          width: "30%",  // Keep dropdown width at 30%
+          gap: 20,
+          marginTop: 50,
+          width: "30%",
           marginLeft: "auto",
           marginRight: "auto",
-          marginBottom: "40px", // Space to next section
+          marginBottom: 40,
         }}
       >
-        {/* STATE Dropdown */}
+        {/* STATE */}
         <div style={{ flex: 1 }}>
           <label
             style={{
@@ -194,7 +229,7 @@ export default function Index() {
             value={selectedState}
             onChange={(e) => {
               setSelectedState(e.target.value);
-              setSelectedDistrict(""); // Reset district when state changes
+              setSelectedDistrict("");
             }}
             style={{
               width: "100%",
@@ -215,7 +250,7 @@ export default function Index() {
           </select>
         </div>
 
-        {/* DISTRICT Dropdown */}
+        {/* DISTRICT */}
         <div style={{ flex: 1 }}>
           <label
             style={{
@@ -242,9 +277,9 @@ export default function Index() {
               outline: "none",
             }}
           >
-            <option value="">{selectedState ? "Select District" : "Select state first"}</option>
-
-            {/* Dynamically populate districts */}
+            <option value="">
+              {selectedState ? "Select District" : "Select state first"}
+            </option>
             {selectedState &&
               districtData[selectedState]?.map((district: string) => (
                 <option key={district} value={district}>
@@ -260,17 +295,17 @@ export default function Index() {
         onClick={handleCheckRisk}
         disabled={loading}
         style={{
-          marginTop: "20px",
+          marginTop: 20,
           display: "block",
           marginLeft: "auto",
           marginRight: "auto",
           padding: "12px 30px",
-          fontSize: "16px",
+          fontSize: 16,
           fontWeight: 600,
           color: "#fff",
           backgroundColor: "#d32f2f",
           border: "none",
-          borderRadius: "12px",
+          borderRadius: 12,
           cursor: loading ? "not-allowed" : "pointer",
           boxShadow: "0 4px 6px rgba(0,0,0,0.2)",
           transition: "all 0.2s ease-in-out",
@@ -281,9 +316,9 @@ export default function Index() {
         {loading ? "Checking..." : "Check Risk"}
       </button>
 
-      {/* Risk and AI advice output */}
+      {/* Risk & AI Advice Output */}
       <div style={{ position: "relative", width: 1207, margin: "80px auto 40px auto" }}>
-        {/* Back Rectangle (decorative) */}
+        {/* Back Rectangle */}
         <div
           style={{
             position: "absolute",
@@ -297,9 +332,9 @@ export default function Index() {
             boxShadow: "9px 10px 8px 0px #00000040",
             zIndex: 0,
           }}
-        ></div>
+        />
 
-        {/* Front Rectangle (main output) */}
+        {/* Front Rectangle */}
         <div
           style={{
             position: "relative",
@@ -316,43 +351,16 @@ export default function Index() {
           {riskData && (
             <div style={{ marginBottom: 30 }}>
               <h2 style={{ marginBottom: 15, color: "#d32f2f" }}>Risk Result</h2>
-              <div
-                style={{
-                  padding: 15,
-                  backgroundColor: "#fff",
-                  borderRadius: 15,
-                  border: "1px solid #ccc",
-                }}
-              >
-                <p>
-                  <b>Location:</b> {riskData.location.full}
-                </p>
-                <p>
-                  <b>Risk Level:</b> {riskData.riskLevel}
-                </p>
-                <p>
-                  <b>Risk Score:</b> {riskData.riskScore}/100
-                </p>
-                <p>
-                  <b>Water Level:</b> {riskData.metrics?.waterLevel ?? "-"} m
-                </p>
-                <p>
-                  <b>Threshold:</b> {riskData.metrics?.threshold ?? "-"} m
-                </p>
-                <p>
-                  <b>Exceed:</b> {riskData.metrics?.exceedMeters ?? "-"} m (
-                  {riskData.metrics?.percentageOfThreshold ?? "-"}%)
-                </p>
-                <p>
-                  <b>Trend:</b> {riskData.metrics?.trend ?? "-"}
-                </p>
-                <p>
-                  <b>Station:</b> {riskData.station?.name ?? "-"}
-                </p>
-                <p>
-                  <b>Thunderstorm Active:</b>{" "}
-                  {riskData.weather?.thunderstormActive ? "Yes" : "No"}
-                </p>
+              <div style={{ padding: 15, backgroundColor: "#fff", borderRadius: 15, border: "1px solid #ccc" }}>
+                <p><b>Location:</b> {riskData.location.full}</p>
+                <p><b>Risk Level:</b> {riskData.riskLevel}</p>
+                <p><b>Risk Score:</b> {riskData.riskScore}/100</p>
+                <p><b>Water Level:</b> {riskData.metrics?.waterLevel ?? "-"} m</p>
+                <p><b>Threshold:</b> {riskData.metrics?.threshold ?? "-"} m</p>
+                <p><b>Exceed:</b> {riskData.metrics?.exceedMeters ?? "-"} m ({riskData.metrics?.percentageOfThreshold ?? "-"}%)</p>
+                <p><b>Trend:</b> {riskData.metrics?.trend ?? "-"}</p>
+                <p><b>Station:</b> {riskData.station?.name ?? "-"}</p>
+                <p><b>Thunderstorm Active:</b> {riskData.weather?.thunderstormActive ? "Yes" : "No"}</p>
               </div>
             </div>
           )}
@@ -360,20 +368,10 @@ export default function Index() {
           {aiAdvice && (
             <div>
               <h2 style={{ marginBottom: 15, color: "#081D93" }}>AI Advice</h2>
-              <div
-                style={{
-                  padding: 15,
-                  backgroundColor: "#fff",
-                  borderRadius: 15,
-                  border: "1px solid #ccc",
-                  lineHeight: 1.6,
-                }}
-              >
+              <div style={{ padding: 15, backgroundColor: "#fff", borderRadius: 15, border: "1px solid #ccc", lineHeight: 1.6 }}>
                 <div
                   className="ai-content"
-                  dangerouslySetInnerHTML={{
-                    __html: formatAIAdvice(aiAdvice),
-                  }}
+                  dangerouslySetInnerHTML={{ __html: formatAIAdvice(aiAdvice) }}
                 />
               </div>
             </div>
