@@ -39,8 +39,8 @@ export default function Index() {
     try {
       setLoading(true);
 
-      // 1️⃣ Call backend /check-risk
-      const res = await fetch("http://localhost:5000/api/check-risk", {
+      // 1️. Call backend /check-risk
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/check-risk`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -49,9 +49,9 @@ export default function Index() {
       const data = await res.json();
       setRiskData(data);
 
-      // 2️⃣ Call Gemini AI for advice
+      // 2️. Call Gemini AI for advice
       const aiPayload = { ...data, language };
-      const aiRes = await fetch("http://localhost:7000/api/generate-advice", {
+      const aiRes = await fetch(`${import.meta.env.VITE_AI_URL}/api/generate-advice`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(aiPayload),
