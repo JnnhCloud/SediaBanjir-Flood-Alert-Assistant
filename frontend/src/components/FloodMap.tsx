@@ -24,31 +24,59 @@ export default function FloodMap({
   const markerRef = useRef<L.CircleMarker | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
-  // Define the bounds for Malaysia
+  const malaysiaCenter: [number, number] = [4.2105, 101.9758];
+  const malaysiaZoom = 6;
+
+  // Malaysia bounds to restrict panning
   const malaysiaBounds = L.latLngBounds(
-    L.latLng(1.5, 98.0), // South-West corner (Southernmost point)
-    L.latLng(7.5, 119.5)  // North-East corner (Northernmost point)
+    L.latLng(1.5, 98.0),
+    L.latLng(7.5, 119.5)
   );
 
-  // Initialize map
   useEffect(() => {
     if (!mapRef.current && mapContainerRef.current) {
       mapRef.current = L.map(mapContainerRef.current, {
-        center: [4.2105, 101.9758], // Center on Malaysia
-        zoom: 6, // Initial zoom to show the entire country
-        minZoom: 6, // Minimum zoom level to restrict zooming out
-        maxZoom: 11, // Maximum zoom level to prevent zooming in too much
-        scrollWheelZoom: false, // Disable scroll zoom (optional)
-        attributionControl: false, // Optional, remove attribution if needed
+        center: malaysiaCenter,
+        zoom: malaysiaZoom,
+        minZoom: 6,
+        maxZoom: 11,
       });
 
-      // Set up the tile layer (OpenStreetMap)
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap contributors",
       }).addTo(mapRef.current);
 
-      // Restrict panning and zooming to Malaysia's bounds
       mapRef.current.setMaxBounds(malaysiaBounds);
+
+      // --- Add Custom Reset Button to Leaflet Map Controls ---
+      const ResetControl = L.Control.extend({
+        options: { position: "topleft" }, // same as zoom control
+        onAdd: function () {
+          const container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+          container.style.backgroundColor = "#fff";
+          container.style.width = "34px";
+          container.style.height = "34px";
+          container.style.display = "flex";
+          container.style.alignItems = "center";
+          container.style.justifyContent = "center";
+          container.style.cursor = "pointer";
+          container.title = "Reset to default view";
+
+          // Use a simple Unicode map icon or reset icon
+          container.innerHTML = "⟳"; // circular arrow icon
+          container.style.fontSize = "18px";  // Increase font size
+          container.style.fontWeight = "bold";  // Make it bold
+
+          L.DomEvent.on(container, "click", (e) => {
+            L.DomEvent.stopPropagation(e);
+            mapRef.current?.setView(malaysiaCenter, malaysiaZoom);
+          });
+
+          return container;
+        },
+      });
+
+      mapRef.current.addControl(new ResetControl());
     }
   }, []);
 
@@ -56,10 +84,8 @@ export default function FloodMap({
   useEffect(() => {
     if (!mapRef.current || !coordinates) return;
 
-    // Zoom to selected coordinates
     mapRef.current.setView([coordinates.lat, coordinates.lng], 11);
 
-    // Determine marker color based on risk level
     let color = "green";
     switch (riskLevel?.toLowerCase()) {
       case "danger":
@@ -73,8 +99,6 @@ export default function FloodMap({
       case "alert":
         color = "yellow";
         break;
-      default:
-        color = "green";
     }
 
     const popupContent = `
@@ -84,7 +108,6 @@ export default function FloodMap({
       Trend: ${metrics?.trend ?? "-"}
     `;
 
-    // Smooth marker update
     if (markerRef.current) {
       markerRef.current.setLatLng([coordinates.lat, coordinates.lng]);
       markerRef.current.setStyle({ fillColor: color });
