@@ -121,11 +121,6 @@ export default function Index() {
 
   return (
     <div style={{ padding: 20 }}>
-      {/* Header */}
-      <div className="dashboard-header">
-        <h1 className="main-title">SEDIABANJIR</h1>
-        <p className="sub-title">Malaysia Flood Alert Assistant</p>
-      </div>
 
       {/* Header */}
       <div className="dashboard-header">
