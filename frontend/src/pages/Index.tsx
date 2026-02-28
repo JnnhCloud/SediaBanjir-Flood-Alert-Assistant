@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import LocationSelector from "../components/LocationSelector";
 import FloodMap from "../components/FloodMap";
-import { districtData } from "../data/districtData.ts";
+import { districtData } from "../data/districtData";
+import SignInButton from "../components/SignInButton"; 
 
 const API_BASE = import.meta.env.VITE_BACKEND_URL;
 
@@ -124,6 +125,15 @@ export default function Index() {
       <div className="dashboard-header">
         <h1 className="main-title">SEDIABANJIR</h1>
         <p className="sub-title">Malaysia Flood Alert Assistant</p>
+      </div>
+
+      {/* Header */}
+      <div className="dashboard-header">
+        <h1 className="main-title">SEDIABANJIR</h1>
+        <p className="sub-title">Malaysia Flood Alert Assistant</p>
+
+        {/* Firebase Auth SignIn/SignOut */}
+        <SignInButton />
       </div>
 
       {/* Map Container */}
