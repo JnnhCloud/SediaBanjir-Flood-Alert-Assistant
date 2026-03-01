@@ -13,20 +13,26 @@ const allowedOrigins = [
   "http://localhost:5173"        // dev frontend (adjust port if needed)
 ];
 
-app.use(cors({
+const corsOptions = {
   origin: function(origin, callback) {
-    // allow requests with no origin (like Postman)
+    // allow requests with no origin (like curl/Postman)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = "The CORS policy for this site does not allow access from the specified Origin.";
-      return callback(new Error(msg), false);
+    if (!allowedOrigins.includes(origin)) {
+      return callback(new Error("CORS not allowed"), false);
     }
     return callback(null, true);
   },
   methods: ["GET", "POST", "OPTIONS"],
-  credentials: true
-}));
+  credentials: true,
+};
 
+// Use CORS globally
+app.use(cors(corsOptions));
+
+// Make sure Express responds to preflight requests automatically
+app.options("*", cors(corsOptions));
+
+// Body parser
 app.use(express.json());
 
 // Route mounting
@@ -38,7 +44,7 @@ app.get("/api/hello", (req, res) => {
   res.send("Hello from merged backend!");
 });
 
-// Cloud Run port
+// Cloud Run port. Start server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
