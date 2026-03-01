@@ -141,4 +141,4 @@ node server.js
 
 ## 👨‍💻 Author
 
-Student project submission for Google Developer competition.
+Crocohack for Kitahack 2026.
