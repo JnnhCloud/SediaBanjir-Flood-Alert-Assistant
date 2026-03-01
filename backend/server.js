@@ -8,7 +8,7 @@ const adviceRoute = require("./routes/advice");
 const app = express();
 
 const allowedOrigins = [
-  "https://project.vercel.app", // remove trailing slash!
+  "https://sedia-banjir-frontend.vercel.app", // remove trailing slash!
   "http://localhost:5173"
 ];
 
