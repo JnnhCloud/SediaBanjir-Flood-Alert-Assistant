@@ -6,28 +6,7 @@ const riskRoute = require("./routes/risk");
 const adviceRoute = require("./routes/advice");
 
 const app = express();
-
-const allowedOrigins = [
-  "https://sedia-banjir-frontend.vercel.app", // remove trailing slash!
-  "http://localhost:5173"
-];
-
-const corsOptions = {
-  origin: function(origin, callback) {
-    if (!origin) return callback(null, true); // allow Postman / health checks
-    callback(null, allowedOrigins.includes(origin)); // true or false, never throw
-  },
-  methods: ["GET", "POST", "OPTIONS"],
-  credentials: true
-};
-
-// Use CORS globally
-app.use(cors(corsOptions));
-
-// Handle preflight OPTIONS requests
-app.options("*", cors(corsOptions));
-
-// Body parser
+app.use(cors());
 app.use(express.json());
 
 // Route mounting
@@ -39,7 +18,7 @@ app.get("/api/hello", (req, res) => {
   res.send("Hello from merged backend!");
 });
 
-// Cloud Run port. Start server
+// Cloud Run port
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
