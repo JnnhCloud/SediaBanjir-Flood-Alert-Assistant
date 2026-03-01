@@ -80,10 +80,15 @@ VITE_FIREBASE_STORAGE_BUCKET=your_bucket
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
-VITE_BACKEND_URL=http://localhost:8080
 ```
 
 Make sure Firebase Authentication is configured in your Firebase project (Google Sign-In enabled).
+
+In the existing .env.local file, update the backend URL:
+
+```env
+VITE_BACKEND_URL=http://localhost:8080
+```
 
 ### 4️⃣ Start Development Server
 
