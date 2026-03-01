@@ -70,7 +70,7 @@ npm install
 
 ### 3️⃣ Create a `.env` File
 
-Create a `.env` file in the root directory and add:
+Create a `.env` file in the frontend root and add your Firebase configuration:
 
 ```env
 VITE_FIREBASE_API_KEY=your_key
