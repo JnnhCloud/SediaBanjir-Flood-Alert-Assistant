@@ -80,8 +80,10 @@ VITE_FIREBASE_STORAGE_BUCKET=your_bucket
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
-VITE_BACKEND_URL=your_backend_url
+VITE_BACKEND_URL=http://localhost:8080
 ```
+
+Make sure Firebase Authentication is configured in your Firebase project (Google Sign-In enabled).
 
 ### 4️⃣ Start Development Server
 
@@ -96,7 +98,7 @@ npm run dev
 Navigate into backend folder:
 
 ```bash
-cd backend
+cd SediaBanjir-Flood-Alert-Assistant\backend
 ```
 
 ### 1️⃣ Install Dependencies
@@ -109,6 +111,7 @@ npm install
 
 ```env
 GEMINI_API_KEY=your_gemini_key
+PORT=8080
 ```
 
 ### 3️⃣ Start Backend Server
@@ -118,6 +121,7 @@ node server.js
 ```
 
 ---
+The backend API will now run on http://localhost:8080 and connect with the frontend.
 
 ## 🌍 Deployment
 
