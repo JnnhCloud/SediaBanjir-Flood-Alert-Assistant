@@ -14,10 +14,8 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function(origin, callback) {
-    // allow requests with no origin (like curl, Postman, Render health checks)
-    if (!origin) return callback(null, true);
-    // allow only whitelisted origins, else reject silently
-    callback(null, allowedOrigins.includes(origin));
+    if (!origin) return callback(null, true); // allow Postman / health checks
+    callback(null, allowedOrigins.includes(origin)); // true or false, never throw
   },
   methods: ["GET", "POST", "OPTIONS"],
   credentials: true
