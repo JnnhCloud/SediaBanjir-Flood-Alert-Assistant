@@ -7,29 +7,26 @@ const adviceRoute = require("./routes/advice");
 
 const app = express();
 
-// Enable CORS for frontend (Vercel) and local dev
 const allowedOrigins = [
-  "https://sedia-banjir-frontend.vercel.app/",  // production frontend
-  "http://localhost:5173"        // dev frontend (adjust port if needed)
+  "https://project.vercel.app", // remove trailing slash!
+  "http://localhost:5173"
 ];
 
 const corsOptions = {
   origin: function(origin, callback) {
-    // allow requests with no origin (like curl/Postman)
+    // allow requests with no origin (like curl, Postman, Render health checks)
     if (!origin) return callback(null, true);
-    if (!allowedOrigins.includes(origin)) {
-      return callback(new Error("CORS not allowed"), false);
-    }
-    return callback(null, true);
+    // allow only whitelisted origins, else reject silently
+    callback(null, allowedOrigins.includes(origin));
   },
   methods: ["GET", "POST", "OPTIONS"],
-  credentials: true,
+  credentials: true
 };
 
 // Use CORS globally
 app.use(cors(corsOptions));
 
-// Make sure Express responds to preflight requests automatically
+// Handle preflight OPTIONS requests
 app.options("*", cors(corsOptions));
 
 // Body parser
