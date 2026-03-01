@@ -59,7 +59,7 @@ Handles risk logic, Gemini prompt construction, AI response formatting, and secu
 
 ```bash
 git clone https://github.com/JnnhCloud/SediaBanjir-Flood-Alert-Assistant.git
-cd sediabanjir
+cd SediaBanjir-Flood-Alert-Assistant\frontend
 ```
 
 ### 2️⃣ Install Dependencies
