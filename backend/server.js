@@ -6,7 +6,27 @@ const riskRoute = require("./routes/risk");
 const adviceRoute = require("./routes/advice");
 
 const app = express();
-app.use(cors());
+
+// Enable CORS for frontend (Vercel) and local dev
+const allowedOrigins = [
+  "https://project.vercel.app",  // production frontend
+  "http://localhost:5173"        // dev frontend (adjust port if needed)
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    // allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = "The CORS policy for this site does not allow access from the specified Origin.";
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Route mounting
