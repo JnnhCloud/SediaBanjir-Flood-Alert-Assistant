@@ -9,7 +9,7 @@ const app = express();
 
 // Enable CORS for frontend (Vercel) and local dev
 const allowedOrigins = [
-  "https://project.vercel.app",  // production frontend
+  "https://sedia-banjir-frontend.vercel.app/",  // production frontend
   "http://localhost:5173"        // dev frontend (adjust port if needed)
 ];
 
